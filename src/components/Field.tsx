@@ -2,10 +2,7 @@
  * Campo de seleção do jogo
  */
 import React from 'react';
-import { 
-    StyleSheet,
-    TouchableOpacity
-} from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 import { params } from '../Utils/gameParams';
 import View from './View';
 import Text from './Text';
@@ -38,7 +35,7 @@ const Component: React.FC<ComponentProps> = ({
      * do campo de acordo com
      * armadilhas próximas
      */
-    const getMineColor = () => (
+    const getMineTextColor = () => (
         (nearMines === 1) ? ('#2A28D7') : 
         (nearMines === 2) ? ('#2B520F') : 
         (nearMines >= 6)  ? ('#F221A9') :
@@ -47,7 +44,7 @@ const Component: React.FC<ComponentProps> = ({
     );
     
     React.useEffect( () => {
-        if(styleField.length === 1) 
+        if(styleField.length === 1 || !opened) 
             setStyleField([...styleField, styles.regular ]);
         if(opened)
             setStyleField([...styleField, styles.opened ]);
@@ -58,18 +55,15 @@ const Component: React.FC<ComponentProps> = ({
     }, [opened, flagged, exploded]);
 
     return (
-        <TouchableOpacity 
-            onPress={() => onPress()}
-            onLongPress={() => onLongPress()}
-        >
+        <TouchableOpacity onPress={() => onPress()} onLongPress={() => onLongPress()}>
             <View style={styleField}>
                 {(!mined && opened && nearMines > 0) ? (
-                    <Text style={[styles.label, { color: getMineColor() }]}>
+                    <Text style={[styles.label, { color: getMineTextColor() }]}>
                         {nearMines}
                     </Text>
-                ) : (false)}
-                {(mined && opened) ? (<Mine />) : (false)}
-                {(flagged && !opened) ? (<Flag />) : (false)}
+                ) : (null)}
+                {(mined && opened) ? (<Mine />) : (null)}
+                {(flagged && !opened) ? (<Flag />) : (null)}
             </View>
         </TouchableOpacity>
     );
@@ -86,7 +80,8 @@ const styles = StyleSheet.create({
         borderLeftColor: '#CCC',
         borderTopColor: '#CCC',
         borderRightColor: '#333',
-        borderBottomColor: '#333'
+        borderBottomColor: '#333',
+        borderWidth: params.borderSize
     },
     opened: {
         backgroundColor: '#7d7777',
@@ -100,12 +95,10 @@ const styles = StyleSheet.create({
         fontSize: params.fontSize
     },
     exploded: {
-        backgroundColor: '#eb5352',
-        borderColor: '#eb5352'
+        backgroundColor: '#eb5352'
     },
     flagged: {
         backgroundColor: '#FFF',
-        borderColor: '#000'
     }
 });
 

@@ -102,8 +102,10 @@ const safeNeighborhood = (board: TBoard[][], row: number, column: number) => {
  */
 export const openField = (board: TBoard[][], row: number, column: number) => {
     const field = board[row][column];
-    if(!field.opened) {
+    const lost = hadExplosion(board);
+    if(!field.opened && !lost) {
         field.opened = true;
+        field.flagged = false;
         if(field.mined) {
             field.exploded = true;
         } else if(safeNeighborhood(board, row, column)) {

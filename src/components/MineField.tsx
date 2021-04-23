@@ -15,21 +15,18 @@ type MineFieldProps = {
 
 const Component: React.FC<MineFieldProps> = ({ board, openField, onSelectField }) => (
     <View style={styles.container}>
-        {board?.map((row: any, r:number) => {
-            const columns = row.map((field: any, c: number) => (
-                <Field 
-                    onPress={() => openField(r, c)}
-                    onLongPress={() => onSelectField(r, c)}
-                    {...field} 
-                    key={c} 
-                />
-            ));
-            return (
-                <View key={r} style={{flexDirection: 'row'}}>
-                    {columns}
-                </View>
-            );
-        })}
+        {board?.map((row: any, r:number) => (
+            <View key={r} style={{flexDirection: 'row'}}>
+                {row.map((field: any, c: number) => (
+                    <Field 
+                        onPress={() => openField(r, c)}
+                        onLongPress={() => onSelectField(r, c)}
+                        {...field} 
+                        key={c} 
+                    />
+                ))}
+            </View>
+        ))}
     </View>
 );
 
